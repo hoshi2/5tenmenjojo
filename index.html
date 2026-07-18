@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>宅建 5点免除 直前20問</title>
+<style>
+:root{
+  --bg:#FFFFFF; --panel:#F7F8FA; --ink:#1B2430; --sub:#68758A;
+  --line:#E5E9F0; --navy:#16294F;
+  --gold:#C99B2E; --ok:#1FA971; --okbg:#E9F8F1; --ng:#E05252; --ngbg:#FDEDED;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--ink);font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.7;font-size:15px}
+#app{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+header{padding:6px 0 12px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.brand{font-weight:700;font-size:16px}
+.brand small{margin-left:8px;font-weight:500;color:var(--sub);font-size:11px;letter-spacing:.12em}
+.goal{margin-top:10px}
+.goal .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);font-weight:600;margin-bottom:5px}
+.goal .lbl b{color:var(--ok)}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:.2s}
+h2{font-size:12px;color:var(--sub);font-weight:700;letter-spacing:.14em;margin:22px 0 8px}
+.btn{display:block;width:100%;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;text-align:center}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.line{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.soft{background:var(--panel);color:var(--ink);border:1px solid var(--line);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.row2{display:flex;gap:10px;margin-top:10px}
+.row2 .btn{flex:1}
+/* category list */
+.cathead{display:flex;align-items:center;justify-content:space-between;margin:20px 0 8px}
+.cathead h3{font-size:14px;font-weight:800}
+.cathead h3 span{font-size:11px;color:var(--sub);font-weight:600;margin-left:6px}
+.cathead button{border:1px solid var(--navy);color:var(--navy);background:#fff;border-radius:999px;font-size:12px;font-weight:700;padding:5px 12px;cursor:pointer}
+.qrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px;cursor:pointer;color:var(--ink)}
+.qrow .st{flex:none;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;background:var(--panel);border:1px solid var(--line);color:#B6BFCC}
+.qrow.ok .st{background:var(--okbg);border-color:#BFE8D6;color:var(--ok)}
+.qrow.ng .st{background:var(--ngbg);border-color:#F5C9C9;color:var(--ng)}
+.qrow .tt{flex:1;min-width:0}
+.qrow .tt b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qrow .tt span{font-size:11px;color:var(--sub)}
+.qrow .cnt{flex:none;text-align:right;font-size:11px;color:var(--sub);line-height:1.5}
+.qrow .cnt b{font-size:12px}
+.qrow .cnt .o{color:var(--ok)} .qrow .cnt .x{color:var(--ng)}
+/* quiz */
+.qtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.chip{font-size:11px;font-weight:700;color:var(--navy);background:#EDF1F9;border-radius:6px;padding:3px 9px}
+.chip.c1{color:#16294F;background:#EDF1F9}
+.chip.c2{color:#7A4A0E;background:#FBF2E2}
+.chip.c3{color:#175E4C;background:#E7F5F0}
+.qnum{font-size:12px;color:var(--sub);font-weight:600}
+.pbar{height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
+.pbar i{display:block;height:100%;background:var(--gold);border-radius:99px}
+.qhist{font-size:11px;color:var(--sub);margin-bottom:10px}
+.qhist b.o{color:var(--ok)} .qhist b.x{color:var(--ng)}
+.qtext{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:14px;white-space:pre-wrap;margin-bottom:14px}
+.choice{display:flex;gap:10px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:14px;line-height:1.65;margin-bottom:10px;cursor:pointer;color:var(--ink)}
+.choice .no{flex:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sub)}
+.choice.sel-ok{border-color:var(--ok);background:var(--okbg)}
+.choice.sel-ok .no{border-color:var(--ok);background:var(--ok);color:#fff}
+.choice.sel-ng{border-color:var(--ng);background:var(--ngbg)}
+.choice.sel-ng .no{border-color:var(--ng);background:var(--ng);color:#fff}
+.choice.dim{opacity:.45}
+.verdict{font-size:20px;font-weight:800;margin:4px 0 10px}
+.verdict.ok{color:var(--ok)} .verdict.ng{color:var(--ng)}
+.exp{background:#FBF7EC;border:1px solid #EADFC2;border-radius:12px;padding:13px 14px;font-size:13px;margin-bottom:14px}
+.exp p{margin-bottom:6px}
+.exp p:last-child{margin-bottom:0}
+.exp .hd{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.14em;margin-bottom:6px}
+/* result */
+.score{text-align:center;padding:26px 0 10px}
+.score b{font-size:44px;font-weight:800}
+.score span{color:var(--sub);font-size:15px}
+.miss{background:var(--ngbg);border:1px solid #F5C9C9;border-radius:12px;padding:12px 14px;font-size:13px;margin-top:12px}
+.miss div{padding:3px 0}
+/* gpt */
+.gptbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.gptbox p{font-size:13px;color:var(--sub);margin-bottom:10px}
+textarea{width:100%;height:200px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:11px;color:var(--ink);background:#fff;margin-top:10px;display:none}
+.copied{color:var(--ok)!important}
+footer{margin-top:30px;text-align:center;font-size:11px;color:var(--sub)}
+.modes{display:flex;flex-direction:column;gap:10px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const QUESTIONS = [{"id":1,"cat":"宅建業法","title":"宅地建物取引業とは","ans":2,"q":"宅地建物取引業の免許(以下「免許」という。)に関する次の記述のうち、正しいものはどれか。","choices":["農家がその所有する農地を宅地に転用して売却しようとするときに、その販売代理の依頼を受ける社会福祉法人は、これを反復継続して不特定多数に売却する場合であっても、免許を必要としない。","相続財産である3棟のマンションを、そのうちの2棟を一括して売却し、残りの1棟を宅地建物取引業者に媒介を依頼して反復継続して賃貸する場合、当該マンションを単独で相続した相続人は免許を必要としない。","現在は倉庫が建っているが、将来道路となることが予定されている10区画の土地を分譲する場合、免許を必要としない。","信託業法第3条の免許を受けた信託会社が宅地建物取引業を営もうとする場合、免許を取得する必要はないが、その旨を内閣総理大臣に届け出ることが必要である。"],"exp":["1 × 売買の代理を業として行うには原則免許が必要。社会福祉法人は例外(国・地方公共団体等)に当たらない。","2 ○ 2棟の一括売却は反復継続でないため「業」に当たらず、1棟の賃貸は自ら貸主となるため「取引」に当たらない。","3 × 現に建物が建っている土地は「宅地」。将来道路予定でも10区画の分譲には免許が必要。","4 × 信託会社は免許不要だが、届出先は国土交通大臣(内閣総理大臣ではない)。"]},{"id":2,"cat":"宅建業法","title":"免許申請と事務所","ans":3,"q":"次の記述のうち、宅地建物取引業法の規定によれば、誤っているものはいくつあるか。\n\nア 事務所に従事する専任の宅地建物取引士は、主たる業務が宅地建物取引業でなければならず、空き家・空き室等の利活用等に係る課題の整理等、その所有者に対して行われる助言又は管理業務等を行う場合は、専任としての要件を欠くことになる。\n\nイ 個人の宅地建物取引士が宅地建物取引業者となっている宅地建物取引業の事務所において、当該個人が同一の場所において土地家屋調査士の業務をあわせて行う場合には、同所の専任の宅地建物取引士と認められることとはない。\n\nウ 支店のみで宅地建物取引業を営む宅地建物取引業者は、支店だけでなく本店においてもその業務に関する帳簿を備えなければならない。","choices":["なし","一つ","二つ","三つ"],"exp":["ア × 空き家・空き室等の利活用に係る助言や管理業務等を行っても、専任の要件を欠くことにはならない(誤り)。","イ × 業務量等を勘案のうえ専任と認められる場合があり、「絶対に認められない」わけではない(誤り)。","ウ ○ 本店は主たる事務所として宅建業法上の「事務所」に当たるため、帳簿は本店にも備える必要がある(正しい)。","→ 誤っているのはア・イの二つ。"]},{"id":3,"cat":"宅建業法","title":"免許欠格事由","ans":2,"q":"宅地建物取引業の免許に関する次の記述のうち、宅地建物取引業法の規定によれば、正しいものの組合せはどれか。\n\nア A社の政令で定める使用人は、刑法第247条(背任)の罪を犯し、罰金の刑に処せられたが、その刑の執行を終えてから5年を経過しているので、A社は免許を受けることができる。\n\nイ B社の取締役が、刑法第204条(傷害)の罪で拘禁刑2年執行猶予4年の刑に処せられ、その刑が確定した日から、執行猶予期間の半分である2年を経過していれば、B社は免許を受けることができる。\n\nウ 個人Cは、かつて免許を受けていたとき、自己の名義をもって他人に宅地建物取引業を営ませ、その情状が特に重いとして免許を取り消されたが、免許取消しの日から5年を経過していないので、Cは免許を受けることができない。\n\nエ 個人Dは、かつて破産手続開始の決定を受け、現在は復権を得ているが、復権を得た日から5年を経過していないので、Dは免許を受けることができない。","choices":["アとイ","アとウ","イとエ","ウとエ"],"exp":["ア ○ 背任罪の罰金刑は欠格事由だが、刑の執行後5年を経過しているのでA社は免許を受けられる。","イ × 執行猶予期間が満了すれば直ちに免許可だが、確定から2年時点ではまだ猶予期間中なので不可。","ウ ○ 名義貸しで情状特に重いとして免許取消 → 取消日から5年経過しないと免許不可。","エ × 破産者でも復権を得れば直ちに免許を受けられる(5年待つ必要なし)。"]},{"id":4,"cat":"宅建業法","title":"免許取得後の事情変更","ans":1,"q":"甲県に本店、乙県にa支店を置き国土交通大臣の免許を受けている宅地建物取引業者A(個人)は、a支店の専任の取引士Bが不在になり、宅地建物取引業法第31条の3の要件を欠くこととなった。この場合のAの手続に関する次の記述のうち、宅地建物取引業法の規定によれば、正しいものはいくつあるか。\n\nア 本店のみで宅地建物取引業を行う場合、Aは、a支店が所在する乙県知事を経由して国土交通大臣に免許換えの申請を行う必要がある。\n\nイ a支店に専任の取引士Cを置き、宅地建物取引業を行う場合、Aは、Cを置いた日から30日以内に専任の取引士の変更の届出を行う必要がある。\n\nウ 宅地建物取引業を廃止した場合、Aは、甲県知事を経由して国土交通大臣に30日以内に廃業の届出を行う必要がある。\n\nエ Aは、Bが半年間の入院をしたため、この期間、宅地建物取引業は行わないこととした場合、Aは宅地建物取引業を休止する旨の届出を行う必要がある。","choices":["一つ","二つ","三つ","四つ"],"exp":["ア × 唯一の支店を廃止し甲県内のみの事務所になる場合、甲県知事へ直接免許換えの申請をする(乙県知事経由ではない)。","イ ○ 専任の取引士の変更は30日以内に届出が必要。","ウ × 大臣免許業者の廃業届は直接国土交通大臣へ。知事は経由しない。","エ × 宅建業を「休止する旨の届出」の規定は宅建業法に存在しない(なお1年以上休止は免許取消事由)。","→ 正しいのはイの一つ。","【法改正注意】2024年5月25日以降、大臣免許の免許申請・変更届・廃業届等は知事経由が廃止され、国土交通大臣側へ直接提出。古い教材の「知事経由が正解」はもう通用しない。"]},{"id":5,"cat":"宅建業法","title":"宅地建物取引業保証協会","ans":3,"q":"宅地建物取引業保証協会(以下この問において「保証協会」という。)に関する次の記述のうち、正しいものはどれか。","choices":["還付充当金の未納により保証協会の社員の地位を失った宅地建物取引業者は、その地位を失った日から2週間以内に弁済業務保証金を供託すれば、その地位を回復する。","保証協会は、その社員である宅地建物取引業者から弁済業務保証金分担金の納付を受けたときは、その納付を受けた日から5日以内に、その納付を受けた額に相当する額の弁済業務保証金を供託しなければならない。","保証協会は、弁済業務保証金の還付があったときは、当該還付に係る社員又は社員であった者に対して、当該還付額に相当する額の還付充当金を保証協会に納付すべきことを通知しなければならない。","宅地建物取引業者が保証協会の社員となる前に、当該宅地建物取引業者に建物の貸借の媒介を依頼した者は、その取引により生じた債権に関し、当該保証協会が供託した弁済業務保証金について弁済を受ける権利を有しない。"],"exp":["1 × 社員の地位を失ったときは1週間以内に営業保証金を供託する。「2週間以内の供託で地位回復」という規定はない。","2 × 分担金の納付を受けた日から1週間以内に供託(5日以内ではない)。","3 ○ 還付があったときは、社員(または社員だった者)に還付充当金の納付を通知しなければならない。","4 × 社員になる前の宅建業の取引で生じた債権者も弁済を受ける権利に含まれる。"]},{"id":6,"cat":"宅建業法","title":"広告規制と契約締結時期の制限","ans":2,"q":"次の記述のうち、宅地建物取引業法の規定によれば、正しいものはいくつあるか。なお、この問において「建築確認」とは、建築基準法第6条第1項の確認をいうものとする。\n\nア 宅地建物取引業者は、建築確認が必要とされる建物の建築に関する工事の完了前においては、建築確認を受けた後でなければ、当該建物の交換の代理をしてはならない。\n\nイ 宅地建物取引業者は、建築確認が必要とされる建物の建築に関する工事の完了前において、建築確認の申請中である場合は、その旨を表示すれば、自ら売主として当該建物を販売する旨の広告をすることができる。\n\nウ 宅地建物取引業者は、建築確認が必要とされる建物の建築に関する工事の完了前においては、建築確認を受けた後でなければ、当該建物の貸借の代理を行う旨の広告をしてはならない。","choices":["一つ","二つ","三つ","なし"],"exp":["ア ○ 建築確認前は、売買・交換の契約締結、その代理・媒介をしてはならない(法36条)。","イ × 「建築確認申請中」と表示しても広告はできない(法33条)。","ウ ○ 貸借の代理・媒介の「広告」も建築確認前は不可(契約自体は制限されないが広告はダメ)。","→ 正しいのはア・ウの二つ。"]},{"id":7,"cat":"宅建業法","title":"媒介・代理契約","ans":1,"q":"宅地建物取引業者Aは、BからB所有の宅地の売却について媒介の依頼を受けた。この場合における次の記述のうち、宅地建物取引業法(以下この問において「法」という。)の規定によれば、正しいものはどれか。","choices":["Aは、Bとの間に媒介契約を締結したときは、当該契約が国土交通大臣が定める標準媒介契約約款に基づくものであるか否かの別を、法第34条の2第1項の規定に基づき交付すべき書面等に記載しなければならない。","Aは、Bとの間で媒介契約を締結し、Bに対して当該宅地を売却すべき価額又はその評価額について意見を述べるときは、その根拠を書面で明らかにしなければならない。","Aは、Bとの間に専属専任媒介契約を締結したときは、当該宅地の取引の申込みの受付に関する状況を含む所定の事項を指定流通機構に登録しなければならないが、Bが当該状況を確認するため、直接、同機構が管理する情報にアクセスすることはできない。","Aは、Bとの間で有効期間を1月とする専任媒介契約を締結する際、「Bが媒介契約を更新する旨を申し出ない場合は、有効期間満了により自動更新するものとする」旨の特約を定めることができる。"],"exp":["1 ○ 標準媒介契約約款に基づくか否かの別は、一般媒介契約でも34条の2書面の記載事項。","2 × 価額・評価額に意見を述べるときは根拠を明らかにすれば足り、書面である必要はない。","3 × 依頼者は指定流通機構のステータス管理機能を通じて、申込み受付状況等の登録内容を確認できる。","4 × 専任媒介契約の自動更新特約は無効。更新には依頼者からの申出が必要(3か月上限)。"]},{"id":8,"cat":"宅建業法","title":"報酬額の制限","ans":4,"q":"宅地建物取引業者A社(消費税課税事業者)は貸主Bから建物の貸借の代理の依頼を受け、宅地建物取引業者C社(消費税課税事業者)は借主Dから媒介の依頼を受け、BとDの間で賃貸借契約を成立させた。この場合における次の記述のうち、宅地建物取引業法(以下この問において「法」という。)の規定によれば誤っているものはどれか。なお1か月分の借賃は10万円である。","choices":["建物を住居として貸借する場合、C社は、Dから承諾を得ているときは、110,000円まで報酬をDから受領することができる。","建物を店舗として貸借する場合、A社がBから110,000円の報酬を受領するときは、C社はDから報酬を受領することはできない。","建物を店舗として貸借する場合、本件賃貸借契約において300万円の権利金(返還されない金銭)の授受があるときは、A社及びC社が受領できる報酬の額の合計は、308,000円以内である。","建物が1年を超えるような期間にわたり居住者が不在となっていた場合、A社は、報酬額についてBに説明し、合意を得ていれば、Bから330,000円まで報酬を受領することができる。"],"exp":["1 ○ 居住用でも依頼者の承諾があれば、借賃1.1か月分=110,000円まで受領できる。","2 ○ 貸借の報酬は双方合計で借賃1.1か月分=110,000円が上限。A社が全額受領したらC社は受領できない。","3 ○ 非居住用は権利金を売買代金とみなして計算可。300万×4%+2万=14万、14万×2社×1.1=308,000円。","4 × 長期の空家等(1年超不在はその典型例)は、媒介に要する費用を勘案し事前に説明・合意すれば貸主から原則上限を超えて受領できるが、双方から受ける報酬の合計は借賃の2.2倍=220,000円以内。330,000円は受領できない(誤り)。"]},{"id":9,"cat":"宅建業法","title":"クーリング・オフ","ans":1,"q":"売主を宅地建物取引業者であるA、買主を宅地建物取引業者でないBとする宅地の売買契約について、Bが、宅地建物取引業法第37条の2の規定に基づくいわゆるクーリング・オフによる契約の解除をする場合に関する次の記述のうち、誤っているものの組合せはどれか。\n\nア Aが、売買契約を締結した際に、売買契約の解除ができる旨及びその方法について口頭でのみ説明した場合は、その告知した日から起算して9日後で、かつ、代金の一部を支払った後であれば、Bは、クーリング・オフによる契約の解除をすることができない。\n\nイ Aが、電話によりBの自宅で売買契約に関する説明をする旨を申し出て、Bの自宅を訪問し、そこで買受けの申込みを受けた場合は、Bは、クーリング・オフによる契約の解除をすることができない。\n\nウ Aが、10区画に分けた宅地の分譲について宣伝のみを行う現地案内所でBに契約に関する説明を行い、翌日Aの事務所等から近くのホテルのロビーで売買契約を締結した場合は、Bは、クーリング・オフによる契約の解除をすることができる。\n\nエ Aが、売買契約を締結した後、宅地をBに引き渡し、かつ、その代金の全部を受領した場合は、売買契約の解除ができる旨及びその方法について告知をしていないときでも、Bは、クーリング・オフによる契約の解除をすることができない。","choices":["アとイ","ウとエ","イとウ","イとエ"],"exp":["ア 誤り。口頭のみの告知では8日間のカウントは始まらず、代金の一部支払だけでは失権要件(引渡し+全額支払)を満たさない → 解除できる。","イ 誤り。売主側から申し出た買主の自宅は「事務所等」に当たらない → 解除できる。","ウ 正しい。ホテルのロビーは事務所等に当たらない → 解除できる。","エ 正しい。引渡し+代金全部の支払があれば、告知の有無にかかわらず解除できない。","→ 誤っているのはアとイ。"]},{"id":10,"cat":"宅建業法","title":"損害賠償額の予定・手付金・保全措置","ans":2,"q":"宅地建物取引業者Aが、自ら売主として、宅地建物取引業者でないBとの間でマンション(代金4,000万円)の売買契約を締結した場合に関する次の記述のうち、宅地建物取引業法(以下この問において「法」という。)の規定に違反するものの組合せはどれか。\n\nア Aは、建築工事完了前のマンションの売買契約を締結する際に、Bから手付金200万円を受領し、さらに建築工事中に200万円を中間金として受領する前に、当該手付金と中間金について法第41条に定める保全措置を講じた。\n\nイ Aは、建築工事完了後のマンションの売買契約を締結する際に、法第41条の2に定める保全措置を講じることなくBから手付金800万円を受領した。\n\nウ Aは、建築工事完了前の売買契約を締結する際に、Bから手付金500万円を受領したが、Bに当該手付金500万円を償還して、契約を一方的に解除した。\n\nエ Aは、建築工事完了後のマンションの売買契約を締結する際に、当事者の債務の不履行を理由とする契約の解除に伴う損害賠償の予定額を800万円とする特約を定めた。","choices":["ア、ウ","イ、ウ","ア、イ、エ","ア、ウ、エ"],"exp":["ア 合法。手付金200万円だけの段階では代金の5%以下かつ1,000万円以下なので保全措置なしで受領可。その後、中間金を受け取る前に手付金を含む合計400万円について保全措置を講じているため適法。","イ 違反。完成物件は代金の10%(400万円)超で保全措置が必要。措置なしで800万円の受領は違反。","ウ 違反。売主業者が手付解除するには倍額を現実に提供する必要がある。同額の償還だけでの一方的解除は違反。","エ 合法。損害賠償の予定+違約金の合計は代金の20%(800万円)以内まで可。ちょうど800万円はOK。","→ 違反はイとウ。"]},{"id":11,"cat":"権利関係","title":"意思能力・制限行為能力","ans":4,"q":"制限行為能力者に関する次の記述のうち、民法の規定及び判例によれば、正しいものはどれか。","choices":["百貨店の販売営業に関する営業を許された未成年者は、成年者と同一の行為能力を有するので、法定代理人の同意を得ないで、自己が居住するために建物を第三者から購入したとしても、その法定代理人は当該売買契約を取り消すことができない。","被保佐人が、その実子(17歳)が負う金銭債務について、代理して時効更新の効力を生ずる承認をする場合は、保佐人の同意を必要とする。","成年後見人が、成年被後見人に代わって、成年被後見人が居住している建物について抵当権を設定する際、後見監督人がいる場合には、後見監督人の許可があれば足り、家庭裁判所の許可は不要である。","被補助人が、補助人の同意を得なければならない行為について、同意を得ていないにもかかわらず、同意書を偽造して相手方に補助人の同意を得たと信じさせていたときは、被補助人は当該行為を取り消すことができない。"],"exp":["1 × 許可の効果は「百貨店の販売営業に関する行為」のみ。自己の居住用建物の購入は含まれず、取り消せる。","2 × 債務の承認は観念の通知であり、保佐人の同意は不要(判例)。","3 × 居住用建物への抵当権設定には家庭裁判所の許可が必要。後見監督人の許可では代替できない。","4 ○ 同意書の偽造は「詐術」に当たり、取り消すことができない(民法21条)。"]},{"id":12,"cat":"権利関係","title":"代理","ans":3,"q":"AはBの代理人として、B所有の甲土地をCに売り渡す売買契約をCと締結した。しかし、Aは甲土地を売り渡す代理権は有していなかった。この場合に関する次の記述のうち、民法の規定及び判例によれば、正しいものはどれか。","choices":["BがAに甲土地の貸借に関する代理権を与えるため委任状及び印鑑証明、固定資産税納税証明書等を渡していた場合において、Bは、Aに甲土地を売り渡す具体的な代理権はないことをCが知らなかったことに重大な過失があることを立証したときであっても、Cに甲土地を引き渡す必要がある。","BがAに対し、甲土地に抵当権を設定する代理権を与えていたが、Aが破産したため代理人を解任していた。その半月後になされたAC間の契約は、代理権が消滅した後にさらに権限外の行為をしたものであり、Cの主観的事情に関わらず、Bが責任を負うことはない。","Bが本件売買契約を追認しない間は、Cはこの契約を取り消すことができる。ただし、Cが契約の時において、Aに甲土地を売り渡す具体的な代理権がないことについて悪意の場合は取り消せない。","Cは、Bの追認を得た場合等を除き、Aに対して損害賠償を請求することができるが、Aに代理権がなかったことを過失によって知らなかった場合は、契約時におけるAの主観的事情に関わらず、請求することができない。"],"exp":["1 × 権限外の行為の表見代理は、相手方が代理権のないことを知り、または過失により知らなかった場合には成立しない(重過失は当然に過失に含まれる)。Cの重過失をBが立証すれば免責され、引渡し不要。","2 × 代理権消滅後の表見代理(112条)が成立し得るため、Cの主観的事情次第でBが責任を負う可能性がある。","3 ○ 追認前は相手方は取消可。ただし契約時に無権代理につき悪意なら取り消せない(民法115条)。","4 × 無権代理人が自己に代理権がないことを知っていたときは、相手方に過失があっても責任を負う(117条2項2号) → Aの主観次第で請求できる。"]},{"id":13,"cat":"権利関係","title":"所有・共有","ans":3,"q":"共有に関する次の記述のうち、民法の規定によれば正しいものはどれか。","choices":["共有物を使用する共有者は、別段の合意がある場合を除き、他の共有者に対し、自己の持分を超える使用の対価を償還する義務を負うが、当該使用に関しては自己の財産と同一の注意義務を負うに過ぎない。","各共有者は、他の共有者全員の同意を得なければ、共有物に変更(その形状又は効用の著しい変更を伴わないものを含む。)を加えることができない。","共有者は、共有する建物に、期間を5年とする借地借家法第38条に規定する定期建物賃貸借を設定する場合、共有者全員の同意が必要となる。","裁判所は、共有者の所在が不明であり、共有物の分割について協議が不可能であると判断した場合、職権でその競売を命ずることができる。"],"exp":["1 × 使用する共有者は「善良な管理者の注意」をもって使用しなければならない。自己の財産と同一の注意では足りない。","2 × 軽微変更(形状・効用の著しい変更を伴わないもの)は持分価格の過半数で決められる。「含む」が誤り(正しくは「除く」)。","3 ○ 3年を超える建物賃貸借の設定は共有者全員の同意が必要。5年の定期建物賃貸借は全員同意。","4 × 分割は裁判所への「請求」が必要。請求を待たずに職権で競売命令は出せない。"]},{"id":14,"cat":"権利関係","title":"債務不履行と損害賠償・解除","ans":1,"q":"不動産売買契約(本問では「当該契約」という。)の解除に関する次の記述のうち、民法の規定及び判例によれば、正しいものはどれか。","choices":["当該契約に基づく不動産の引渡債務の履行が、その契約の成立の時に売主の責めに帰すべき事由により不能であった場合でも、買主は、その履行の不能によって生じた損害の賠償を請求することができる。","売主は、買主が約束の期日に代金を支払わなかったので、2週間の期間を定めてその履行の催告をした。丁度その2週間後に売主の銀行口座に代金が振り込まれていたが、2週間遅れた分の法定利息が加算されていなかった場合、売主は、当該契約の解除をすることができる。","契約日から半年後に支払う約束であった残代金の支払いが遅延したことで、売主が当該契約を解除した場合、買主は、解除時の現状における不動産のみを返還すればよい。","契約後に売却不動産が滅失し履行不能となった場合、それが買主の責めに帰すべき事由によるものであっても、買主は当該契約を解除することができる。"],"exp":["1 ○ 原始的不能でも契約は有効で、履行不能による損害賠償を請求できる(民法412条の2第2項)。","2 × 期間経過時の不履行が軽微(2週間分の法定利息のみ)であるときは解除できない(541条ただし書)。","3 × 原状回復では受領時以後に生じた果実(賃料等)も返還しなければならない。現状の不動産だけでは足りない。","4 × 債務不履行が債権者(買主)の責めに帰すべき事由によるときは、債権者からの解除はできない(543条)。"]},{"id":15,"cat":"権利関係","title":"売買契約と契約不適合責任","ans":2,"q":"宅地建物取引業者でも事業者でもないAB間の不動産売買契約における売主Aの責任に関する次の記述のうち、民法の規定によれば、誤っているものはどれか。","choices":["Aは、契約不適合の責任を負わない旨の特約をしたときであっても、Bに対して、知りながら告げなかった事実については、その責任を免れることができない。","引き渡された不動産が、品質に関して契約の内容に適合しないものである場合、Bは、相当の期間を定めてAに対して改修工事の実施を催告することができ、その期間内に改修工事が行われなかったときは、改修に掛かる費用の2倍に相当する額が代金から控除される。","引き渡された不動産に品質上契約内容に適合しないものであることについて、AB共に過失があった場合でも、Bは契約不適合を理由に損害賠償を請求することができる。","AがBに不動産を引き渡した場合において、その引渡しがあった時以後にその不動産が地震により全壊したときは、Bは、その全壊を理由として、損害賠償の請求及び契約の解除をすることができず、かつ、代金を支払わなければならない。"],"exp":["1 ○ 免責特約があっても、知りながら告げなかった事実については責任を免れない(民法572条)。","2 × 追完がないときは「不適合の程度に応じた」代金減額請求ができる(563条)。改修費用の2倍が控除されるわけではない(誤り)。","3 ○ 売主側に帰責事由があることが前提だが、買主に過失があっても損害賠償請求は可能。買主の過失は過失相殺で賠償額に反映され得る。","4 ○ 引渡し後の双方無責の滅失は、買主は解除・賠償等を主張できず、代金の支払を拒めない(567条1項)。"]},{"id":16,"cat":"権利関係","title":"相続","ans":3,"q":"相続に関する次の記述のうち、民法の条文によれば正しいものはどれか。","choices":["相続による権利の承継は、遺産の分割による場合を除き、民法第900条及び同第901条の規定により算定した法定相続分を超える部分については、登記、登録その他の対抗要件を備えなければ、第三者に対抗することができない。","相続開始の時から10年を経過した後にする遺産の分割については、民法第903条に定める特別受益者の相続分及び同第904条の2に定める寄与分の規定は適用されないが、相続人が、当該期間が経過する前に家庭裁判所に遺産の分割の請求をした場合に限り、適用される。","相続の放棄をした者は、その放棄の時に相続財産に属する財産を現に占有しているときは、相続人又は民法第952条第1項の相続財産の清算人に対して当該財産を引き渡すまでの間、自己の財産におけるのと同一の注意をもって、その財産を保存しなければならない。","家庭裁判所は、相続人のあることが明らかでないことを理由に、利害関係人の請求により相続財産の清算人を選任した場合、遅滞なく、その旨及び相続人があるならば2か月以内にその権利を主張すべき旨を公告しなければならない。"],"exp":["1 × 遺産分割によるか否かにかかわらず、法定相続分を超える部分は対抗要件が必要(899条の2)。「除き」が誤り。","2 × 例外は「10年経過前の家裁への分割請求」に限定されない(やむを得ない事由があった場合等もある)。","3 ○ 放棄時に現に占有する財産は、引渡しまで自己の財産と同一の注意で保存する義務がある(940条1項)。","4 × 権利主張の公告期間は6か月を下回れない。2か月以内の公告は不適法。"]},{"id":17,"cat":"法令上の制限","title":"都市計画法―地域地区","ans":1,"q":"都市計画法に関する次の記述のうち、正しいものはどれか。","choices":["市街化区域については、少なくとも用途地域を定めるものとし、市街化調整区域については、原則として用途地域を定めないものとされている。","準都市計画区域は、都市計画区域外の区域のうち、新たに住居都市、工業都市その他の都市として開発し、及び保全する必要がある区域に指定するものとされている。","市街化区域は、未だ市街地を形成していない区域においておおむね10年以内に優先的かつ計画的に市街化を図るべき区域であり、市街化調整区域は、すでに市街化を形成している区域において更なる市街化を抑制すべき区域である。","特定用途制限地域は、用途地域内の一定の区域における当該区域の特性にふさわしい土地利用の増進、環境の保護等の特別の目的の実現を図るため当該用途地域の指定を補完して定めるものとされている。"],"exp":["1 ○ 市街化区域は少なくとも用途地域を定め、市街化調整区域は原則として定めない(都計法13条1項7号)。","2 × 「新たに都市として開発・保全する必要がある区域」は都市計画区域の要件。準都市計画区域は、放置すれば将来の整備等に支障のおそれがある区域。","3 × 市街化区域は「すでに市街地を形成している区域+おおむね10年以内に市街化を図るべき区域」。記述は内容が逆。","4 × 特定用途制限地域は用途地域が「定められていない」区域に定める。記述は特別用途地区の内容。"]},{"id":18,"cat":"法令上の制限","title":"建築基準法―建築確認・単体規定","ans":2,"q":"建築基準法に関する次の記述のうち、正しいものはどれか。","choices":["住宅の地上階における居住のための居室には、その床面積に対して5分の1以上の割合で、採光のための窓その他の開口部を設けなければならないが、国土交通大臣が定める基準に従い、照明設備の設置、有効な採光方法の確保その他これらに準ずる措置が講じられているものにあっては、その割合は7分の1までの範囲内において国土交通大臣が別に定める割合となる。","住宅の居室、学校の教室、病院の病室又は寄宿舎の寝室は、壁及び床等に防湿の措置が施され、居室内の湿度を調節する設備が設けられている等衛生上必要な一定の技術的基準に適合するものであれば、地階に設けることができる。","2階建て、延べ面積400㎡、高さ12m、軒の高さ8mの木造の建築物について、大規模な修繕をしようとする場合、都市計画区域外であれば建築確認を受ける必要がない。","商業地域内にあるキャバレーの用途に供する建築物をナイトクラブ(その用途に供する部分の床面積の合計が300㎡)に用途変更する場合、建築確認が必要である。"],"exp":["1 × 原則は床面積の1/7以上(1/5ではない)。照明設備の設置等の措置で1/10までの範囲で緩和できる。数字が逆。","2 ○ 防湿措置等の衛生上必要な技術的基準に適合すれば、地階に設けることができる(建基法29条)。","3 × 2階以上または延べ面積200㎡超の建築物の大規模修繕は、区域を問わず建築確認が必要。","4 × キャバレー→ナイトクラブは類似の用途相互間の変更なので建築確認は不要。"]},{"id":19,"cat":"法令上の制限","title":"宅地造成及び特定盛土等規制法","ans":3,"q":"宅地造成及び特定盛土等規制法(本問では以下「法」という。)に関する次の記述のうち、正しいものはどれか。なお、この問において「都道府県知事」とは、地方自治法に基づく指定都市、中核市にあってはその長をいうものとする。","choices":["都道府県は、基本方針に基づき、おおむね3年ごとに、宅地造成等工事規制区域、特定盛土等規制区域及び造成宅地防災区域の指定等のため、特定盛土等又は土石の堆積に伴う崖崩れ又は土砂の流出のおそれがある土地に関する地形、地質の状況等に関する調査を行わなければならない。","都道府県は、法第5条1項に定める基礎調査により他人に損失を与えるときは、将来生ずべき損失を算出したうえで、事前に補償しなければならない。","工事主は、宅地造成等工事規制区域内において行われる宅地造成等に関する工事の許可を申請する場合は、あらかじめ、宅地造成等に関する工事の施行に係る土地の周辺地域の住民に対し、説明会の開催その他の当該宅地造成等に関する工事の内容を周知させるため必要な措置を講じなければならない。","特定盛土等規制区域内において行われる、高さ1.5メートルの盛土でその結果崖を生じるものであり、その土地の面積が3,000平方メートルの工事については、工事主は、当該工事に着手する前に、都道府県知事の許可を受けなければならない。"],"exp":["1 × 基礎調査は「おおむね5年ごと」(3年ではない)。","2 × 損失補償は「通常生ずべき損失」を補償するもので、事前の補償ではない。","3 ○ 許可申請の前に、あらかじめ周辺住民への説明会の開催等の周知措置を講じる必要がある(盛土規制法11条)。","4 × 特定盛土等規制区域の許可対象は「盛土で崖の高さ2m超」「面積3,000㎡超」等の一定規模以上。高さ1.5m・面積3,000㎡ちょうどはいずれにも該当せず許可不要。"]},{"id":20,"cat":"法令上の制限","title":"不動産鑑定評価基準","ans":1,"q":"不動産の鑑定評価に関する次の記述のうち、不動産鑑定評価基準によれば、正しいものはどれか。","choices":["特定価格とは、市場性を有する不動産について、法令等による社会的要請を背景とする鑑定評価目的の下で、正常価格の前提となる諸条件を満たさないことにより正常価格と同一の市場概念の下において形成されるであろう市場価値と乖離することとなる場合における不動産の経済価値を適正に表示する価格をいう。","鑑定評価は、対象不動産の現況を所与の条件としなければならず、依頼目的に応じて想定上の条件を付すことはできない。","鑑定評価に当たって必要とされる取引事例は、当該事例に係る取引の事情が正常なものでなければならず、特殊な事情の事例を補正して用いることはできない。","収益還元法は、対象不動産が将来生み出すであろうと期待される純収益の現在価値の総和を求めることにより対象不動産の試算価格を求める手法であり、文化財の指定を受けた建造物等の一般的に市場性を有しない不動産といえども観光を想定することにより適用される。"],"exp":["1 ○ 特定価格の定義として正しい。","2 × 依頼目的に応じて、地域要因・個別的要因について想定上の条件を付加できる場合がある。","3 × 特殊な事情の事例でも、事情補正ができるものであれば取引事例として使える。","4 × 収益還元法は、文化財指定の建造物等の市場性を有しない不動産「以外」には基本的にすべて適用すべき手法。自用の不動産でも賃貸を想定して適用する。"]}];
+const CATS=["宅建業法","権利関係","法令上の制限"];
+const CATLABEL={"宅建業法":"宅建業法","権利関係":"民法・権利関係","法令上の制限":"法令上の制限"};
+const CATCLS={"宅建業法":"c1","権利関係":"c2","法令上の制限":"c3"};
+const KEY="takken5v2";
+let db=load();
+function load(){ try{const d=JSON.parse(localStorage.getItem(KEY)); if(d&&d.rec) return d;}catch(e){} return {rec:{}}; }
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){} }
+function rec(id){ return db.rec[id]||null; }
+
+let quiz={list:[],i:0,correct:0,wrongIds:[],answered:false,single:false};
+const app=document.getElementById("app");
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function header(){
+  const ok=QUESTIONS.filter(q=>{const r=rec(q.id);return r&&r.last==="o";}).length;
+  return '<header><div class="brand">宅建 直前20問<small>5点免除・火曜テスト</small></div>'+
+  '<div class="goal"><div class="lbl"><span>ゴール：全問を「直近○」にする</span><b>'+ok+' / 20</b></div>'+
+  '<div class="bar"><i style="width:'+(ok/20*100)+'%"></i></div></div></header>';
+}
+
+function home(){
+  const ngList=QUESTIONS.filter(q=>{const r=rec(q.id);return r&&r.last==="x";});
+  const newCount=QUESTIONS.filter(q=>!rec(q.id)).length;
+  let html=header()+
+  '<div class="modes" style="margin-top:14px">'+
+  '<button class="btn primary" onclick="startAll()">全20問 順番に解く</button>'+
+  '<div class="row2" style="margin-top:0">'+
+  '<button class="btn line" onclick="startWrong()" '+(ngList.length?'':'disabled')+'>×だけ潰す ('+ngList.length+')</button>'+
+  '<button class="btn line" onclick="startNew()" '+(newCount?'':'disabled')+'>未回答だけ ('+newCount+')</button>'+
+  '</div></div>';
+  CATS.forEach(cat=>{
+    const qs=QUESTIONS.filter(q=>q.cat===cat);
+    html+='<div class="cathead"><h3>'+CATLABEL[cat]+'<span>'+qs.length+'問</span></h3>'+
+    '<button onclick="startCat(\''+cat+'\')">通しで解く</button></div>';
+    qs.forEach(q=>{
+      const r=rec(q.id);
+      const cls=r?(r.last==="o"?"ok":"ng"):"";
+      const mark=r?(r.last==="o"?"○":"×"):"—";
+      const cnt=r?('<b>'+r.a+'</b>回<br><b class="o">○'+r.o+'</b> <b class="x">×'+r.x+'</b>'):'未回答';
+      html+='<button class="qrow '+cls+'" onclick="startOne('+q.id+')">'+
+      '<span class="st">'+mark+'</span>'+
+      '<span class="tt"><b>問'+q.id+'　'+esc(q.title)+'</b><span>'+CATLABEL[cat]+'</span></span>'+
+      '<span class="cnt">'+cnt+'</span></button>';
+    });
+  });
+  html+='<h2>GPTで検証</h2>'+
+  '<div class="gptbox"><p>書き起こした全20問＋正解＋解説を検証プロンプト付きでコピー。GPTに貼って読み込みミスがないかチェック。</p>'+
+  '<button class="btn line" id="cpbtn" onclick="copyVerify()">検証用テキストをコピー</button>'+
+  '<button class="btn soft" style="margin-top:8px" onclick="toggleVerify()">テキストを表示/非表示</button>'+
+  '<textarea id="vta" readonly></textarea></div>'+
+  '<button class="btn soft" style="margin-top:14px" onclick="resetAll()">記録をリセット</button>'+
+  '<footer>データはこの端末のブラウザ内に保存</footer>';
+  app.innerHTML=html;
+  document.getElementById("vta").value=buildVerifyText();
+  window.scrollTo(0,0);
+}
+function resetAll(){ if(confirm("解答記録を全部消す？")){ db.rec={}; save(); home(); } }
+
+function startAll(){ run(QUESTIONS.map(q=>q.id),false); }
+function startCat(cat){ run(QUESTIONS.filter(q=>q.cat===cat).map(q=>q.id),false); }
+function startWrong(){ run(QUESTIONS.filter(q=>{const r=rec(q.id);return r&&r.last==="x";}).map(q=>q.id),false); }
+function startNew(){ run(QUESTIONS.filter(q=>!rec(q.id)).map(q=>q.id),false); }
+function startOne(id){ run([id],true); }
+function run(list,single){ if(!list.length)return; quiz={list:list,i:0,correct:0,wrongIds:[],answered:false,single:single}; renderQ(); }
+function getQ(){ return QUESTIONS.find(q=>q.id===quiz.list[quiz.i]); }
+
+function renderQ(){
+  const q=getQ();
+  quiz.answered=false;
+  const r=rec(q.id);
+  const hist=r?('これまで <b>'+r.a+'回</b>解いて <b class="o">○'+r.o+'</b> / <b class="x">×'+r.x+'</b>'):'初挑戦';
+  const pct=Math.round(quiz.i/quiz.list.length*100);
+  app.innerHTML=header()+
+  '<div class="qtop" style="margin-top:14px"><span class="chip '+CATCLS[q.cat]+'">'+CATLABEL[q.cat]+'　問'+q.id+'　'+esc(q.title)+'</span>'+
+  (quiz.single?'':'<span class="qnum">'+(quiz.i+1)+' / '+quiz.list.length+'</span>')+'</div>'+
+  (quiz.single?'':'<div class="pbar"><i style="width:'+pct+'%"></i></div>')+
+  '<div class="qhist">'+hist+'</div>'+
+  '<div class="qtext">'+esc(q.q)+'</div>'+
+  q.choices.map((c,idx)=>'<button class="choice" id="ch'+idx+'" onclick="answer('+idx+')"><span class="no">'+(idx+1)+'</span><span>'+esc(c)+'</span></button>').join('')+
+  '<div id="after"></div>'+
+  '<button class="btn soft" style="margin-top:6px" onclick="home()">一覧に戻る</button>';
+  window.scrollTo(0,0);
+}
+function answer(idx){
+  if(quiz.answered) return;
+  quiz.answered=true;
+  const q=getQ();
+  const okAns=q.ans-1;
+  const good=(idx===okAns);
+  const r=db.rec[q.id]||{a:0,o:0,x:0};
+  r.a++; good?r.o++:r.x++; r.last=good?"o":"x";
+  db.rec[q.id]=r; save();
+  if(good) quiz.correct++; else quiz.wrongIds.push(q.id);
+  q.choices.forEach((c,i2)=>{
+    const el=document.getElementById("ch"+i2);
+    el.disabled=true;
+    if(i2===okAns) el.classList.add("sel-ok");
+    else if(i2===idx) el.classList.add("sel-ng");
+    else el.classList.add("dim");
+  });
+  let nextBtns;
+  if(quiz.single){
+    const nid=q.id<20?q.id+1:null;
+    nextBtns=(nid?'<button class="btn primary" onclick="startOne('+nid+')">次の問題（問'+nid+'）</button>':'')+
+    '<button class="btn soft" style="margin-top:8px" onclick="home()">一覧に戻る</button>';
+  }else{
+    const last=(quiz.i===quiz.list.length-1);
+    nextBtns='<button class="btn primary" onclick="'+(last?'result()':'next()')+'">'+(last?'結果を見る':'次の問題へ')+'</button>';
+  }
+  document.getElementById("after").innerHTML=
+  '<div class="verdict '+(good?'ok':'ng')+'">'+(good?'正解！':'不正解…　正解は '+q.ans)+'</div>'+
+  '<div class="exp"><div class="hd">解説</div>'+q.exp.map(e=>'<p>'+esc(e)+'</p>').join('')+'</div>'+nextBtns;
+  document.getElementById("after").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function next(){ quiz.i++; renderQ(); }
+function result(){
+  const n=quiz.list.length;
+  const missHtml=quiz.wrongIds.length?
+  '<div class="miss"><b>間違えた問題</b>'+quiz.wrongIds.map(id=>{const q=QUESTIONS.find(x=>x.id===id);return '<div>問'+id+'　'+esc(q.title)+'（正解 '+q.ans+'）</div>';}).join('')+'</div>':'';
+  app.innerHTML=header()+
+  '<div class="score"><b>'+quiz.correct+'<span style="font-size:20px;color:var(--sub)"> / '+n+'</span></b><br><span>'+(quiz.correct===n?'全問正解。仕上がってる。':'×を潰せば勝ち。')+'</span></div>'+
+  missHtml+
+  '<div class="modes" style="margin-top:18px">'+
+  (quiz.wrongIds.length?'<button class="btn primary" onclick="retryWrong()">今の間違いだけやり直す</button>':'')+
+  '<button class="btn soft" onclick="home()">一覧に戻る</button>'+
+  '</div>';
+  window.scrollTo(0,0);
+}
+function retryWrong(){ run(quiz.wrongIds.slice(),false); }
+
+function buildVerifyText(){
+  let t="以下は宅建（登録講習/5点免除向け）の教科書問題集をスキャンから書き起こしたものです。\n";
+  t+="OCRの読み間違い・選択肢の脱落・「教科書の正解」や解説の誤りがないか、1問ずつ検証してください。\n";
+  t+="特に、正解番号が問題文・選択肢と整合しているか、最新の法改正と矛盾しないかを重点的に確認し、怪しい箇所は問番号を挙げて指摘してください。\n\n";
+  QUESTIONS.forEach(q=>{
+    t+="====================\n【問"+q.id+"】"+CATLABEL[q.cat]+"／"+q.title+"\n"+q.q+"\n\n";
+    q.choices.forEach((c,i)=>{ t+=(i+1)+". "+c+"\n"; });
+    t+="\n教科書の正解："+q.ans+"\n解説要点：\n";
+    q.exp.forEach(e=>{ t+="・"+e+"\n"; });
+    t+="\n";
+  });
+  return t;
+}
+function copyVerify(){
+  const t=buildVerifyText();
+  const done=()=>{const b=document.getElementById("cpbtn");b.textContent="コピーした！GPTに貼り付けてOK";b.classList.add("copied");setTimeout(()=>{b.textContent="検証用テキストをコピー";b.classList.remove("copied");},2500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done).catch(()=>{fallbackCopy(t);done();}); }
+  else{ fallbackCopy(t); done(); }
+}
+function fallbackCopy(t){
+  const ta=document.getElementById("vta"); ta.style.display="block"; ta.value=t; ta.select();
+  try{document.execCommand("copy");}catch(e){}
+}
+function toggleVerify(){
+  const ta=document.getElementById("vta");
+  ta.style.display = ta.style.display==="block"?"none":"block";
+}
+home();
+</script>
+</body>
+</html>
