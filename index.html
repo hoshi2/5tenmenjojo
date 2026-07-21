@@ -133,7 +133,11 @@ function home(){
       '<span class="cnt">'+cnt+'</span></button>';
     });
   });
-  html+='<h2>GPTで検証</h2>'+
+  html+='<h2>端末間の同期（PC⇔スマホ）</h2>'+
+  '<div class="gptbox"><p>進めた端末で「同期コードをコピー」→ もう一方の端末で「取り込み」に貼り付けると、解答記録がそのまま移る。</p>'+
+  '<button class="btn line" id="syncbtn" onclick="copySync()">同期コードをコピー</button>'+
+  '<button class="btn soft" style="margin-top:8px" onclick="importSync()">同期コードを取り込み</button></div>'+
+  '<h2>GPTで検証</h2>'+
   '<div class="gptbox"><p>書き起こした全20問＋正解＋解説を検証プロンプト付きでコピー。GPTに貼って読み込みミスがないかチェック。</p>'+
   '<button class="btn line" id="cpbtn" onclick="copyVerify()">検証用テキストをコピー</button>'+
   '<button class="btn soft" style="margin-top:8px" onclick="toggleVerify()">テキストを表示/非表示</button>'+
@@ -217,6 +221,27 @@ function result(){
   window.scrollTo(0,0);
 }
 function retryWrong(){ run(quiz.wrongIds.slice(),false); }
+
+function syncCode(){ return "TK1."+btoa(JSON.stringify(db.rec)); }
+function copySync(){
+  const t=syncCode();
+  const done=()=>{const b=document.getElementById("syncbtn");b.textContent="コピーした！もう一方の端末で取り込み";b.classList.add("copied");setTimeout(()=>{b.textContent="同期コードをコピー";b.classList.remove("copied");},2500);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done).catch(()=>{prompt("このコードをコピーして",t);}); }
+  else{ prompt("このコードをコピーして",t); }
+}
+function importSync(){
+  const t=prompt("同期コードを貼り付けて");
+  if(!t) return;
+  const s=t.trim();
+  if(s.indexOf("TK1.")!==0){ alert("コードの形式が違う"); return; }
+  try{
+    const rec=JSON.parse(atob(s.slice(4)));
+    if(typeof rec!=="object"||rec===null) throw 0;
+    if(!confirm("この端末の記録をコードの内容で置き換える？")) return;
+    db.rec=rec; save(); home();
+    alert("同期完了");
+  }catch(e){ alert("読み込めなかった。コードをもう一度コピーして試して"); }
+}
 
 function buildVerifyText(){
   let t="以下は宅建（登録講習/5点免除向け）の教科書問題集をスキャンから書き起こしたものです。\n";
